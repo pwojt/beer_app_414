@@ -5,3 +5,6 @@
 #
 # Note: The `lib` directory is added to `sys.path` by `appengine_config.py`.
 Flask==0.10
+flask-restful
+passlib
+python_dateutil
