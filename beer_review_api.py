@@ -34,9 +34,19 @@ class BeerReviewSummary(db.Model):
     overall = db.FloatProperty(required=True)
 
 
+beer_reference_fields = {
+    'name': fields.String,
+    'uri': IdUrlField('beer', absolute=True),
+}
+
+user_reference_fields = {
+    'user_name': fields.String,
+    'uri': IdUrlField('user', absolute=True),
+}
+
 beer_review_fields = {
-    'user': ReferenceUrlField('user', absolute=True),
-    'beer': ReferenceUrlField('beer', absolute=True),
+    'user': fields.Nested(user_reference_fields),
+    'beer': fields.Nested(beer_reference_fields),
     'date_created': fields.DateTime,
     'aroma': fields.Float,
     'appearance': fields.Float,
@@ -57,7 +67,7 @@ beer_review_summary_fields = {
     'bottle_style': fields.Float,
     'overall': fields.Float,
     'comments': fields.String,
-    'beer': ReferenceUrlField('beer', absolute=True),
+    'beer': fields.Nested(beer_reference_fields),
 }
 
 

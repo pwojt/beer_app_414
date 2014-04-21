@@ -110,3 +110,12 @@ class UserApi(Resource):
 
         user.put()
         return {'user': marshal(user, user_fields)}
+
+    @requires_auth
+    def delete(self, id):
+        user = User.get_by_id(id)
+        if user is None:
+            abort(404)
+
+        user.delete()
+        return {'user': marshal(user, user_fields), 'action': 'deleted'}
