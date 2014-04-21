@@ -20,6 +20,7 @@ class Beer(db.Model):
     beer_glass = db.ReferenceProperty(BeerGlass)
 
 glass_uri_fields = {
+    'name': fields.String,
     'uri': IdUrlField('beer_glass', absolute=True),
 }
 
@@ -31,7 +32,7 @@ beer_fields = {
     'abv': fields.Float,
     'style': fields.String,
     'brewery_location': fields.String,
-    'beer_glass': ReferenceUrlField('beer_glass', absolute=True),
+    'beer_glass': fields.Nested(glass_uri_fields),
     'uri': IdUrlField('beer', absolute=True),
 }
 

@@ -5,7 +5,7 @@ __author__ = 'wojtowpj'
 from beer_api import Beer
 from user_api import User
 from auth import requires_auth
-from db_helper import IdUrlField, generate_sorted_query, ReferenceUrlField
+from db_helper import IdUrlField, generate_sorted_query
 from flask.ext.restful import Resource, fields, reqparse, marshal, abort
 from google.appengine.ext import db
 
@@ -70,7 +70,6 @@ beer_review_summary_fields = {
     'beer': fields.Nested(beer_reference_fields),
 }
 
-
 post_parser = reqparse.RequestParser()
 post_parser.add_argument('user_id', type=int, required=True, help='user_id is required')
 post_parser.add_argument('aroma', type=float, required=True, help='aroma is required')
@@ -112,6 +111,7 @@ class BeerReviewListApi(Resource):
 
         return add_review(u, b, args)
 
+
 class BeerReviewApi(Resource):
     @requires_auth
     def get(self, id):
@@ -125,7 +125,6 @@ class BeerReviewBeerApi(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('type', type=str, location='args')
-
 
         super(BeerReviewBeerApi, self).__init__()
 
@@ -172,6 +171,7 @@ class BeerReviewUserApi(Resource):
 def moving_average(prev, current, count):
     return prev + (current - prev) / count
 
+
 def add_review(user, beer, review_dict):
     def create_review_summary(beer_review):
         summary = BeerReviewSummary.all().filter('beer', beer_review.beer).get()
@@ -211,7 +211,8 @@ def add_review(user, beer, review_dict):
         allowed_in = (r.date_created + datetime.timedelta(days=7) - date_added).total_seconds()
         abort(429, message="Only one review per user per beer per week allowed.", allowed_in=round(allowed_in))
 
-    scores = [float(review_dict['aroma']), float(review_dict['appearance']), float(review_dict['taste']), float(review_dict['palate']),
+    scores = [float(review_dict['aroma']), float(review_dict['appearance']), float(review_dict['taste']),
+              float(review_dict['palate']),
               float(review_dict['bottle_style'])]
     overall = (sum(scores) / len(scores))
     r = BeerReview(beer=beer,

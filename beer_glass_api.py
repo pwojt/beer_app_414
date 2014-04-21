@@ -1,5 +1,5 @@
 from auth import requires_auth
-from db_helper import IdUrlField
+from db_helper import IdUrlField, update_model
 from flask.ext.restful import Resource, fields, reqparse, marshal, abort
 
 __author__ = 'wojtowpj'
@@ -72,12 +72,9 @@ class BeerGlassApi(Resource):
         g = BeerGlass.get_by_id(id)
         if not g:
             abort(404)
-        if args['name']:
-            g.name = args['name']
-        if args['description']:
-            g.description = args['description']
-        if args['capacity']:
-            g.capacity = args['capacity']
+
+        u = dict(filter(lambda (k, v): v is not None, args.items()))
+        update_model(g, u)
 
         g.put()
         return {'beer_glass': marshal(g, glass_fields)}

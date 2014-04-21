@@ -3,7 +3,7 @@ from functools import wraps
 from google.appengine.ext import db
 from google.appengine.api import users
 
-from db_helper import IdUrlField, generate_sorted_query
+from db_helper import IdUrlField, generate_sorted_query, update_model
 from flask import abort, redirect, request
 from flask.ext.restful import Resource, reqparse, fields, marshal
 from dateutil import parser
@@ -97,16 +97,10 @@ class UserApi(Resource):
         if user is None:
             abort(404)
         args = self.reqparse.parse_args()
-        if args["user_name"]:
-            user.user_name = args["user_name"]
-        if args["first_name"]:
-            user.first_name = args["first_name"]
-        if args["last_name"]:
-            user.last_name = args["last_name"]
-        if args["last_beer_add_date"]:
-            user.last_beer_add_date = parser.parse(args["last_beer_add_date"])
-        if args["password"]:
-            user.password = hash_password(args["password"])
+        u = dict(filter(lambda (k, v): v is not None, args.items()))
+        if u.get('password') is not None:
+            u['password'] = hash_password(u['password'])
+        update_model(user, u)
 
         user.put()
         return {'user': marshal(user, user_fields)}
