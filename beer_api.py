@@ -2,7 +2,7 @@ from beer_glass_api import BeerGlass
 from user_api import User
 
 __author__ = 'wojtowpj'
-from auth import requires_auth
+from auth import requires_auth, get_user
 from db_helper import IdUrlField, update_model, generate_sorted_query, ReferenceUrlField
 from flask.ext.restful import Resource, fields, reqparse, marshal, abort
 from google.appengine.ext import db
@@ -41,7 +41,6 @@ class BeerListApi(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, help='name is required')
-        self.reqparse.add_argument('user_id', type=int, required=True, help='user_id is required')
         self.reqparse.add_argument('description', type=str)
         self.reqparse.add_argument('ibu', type=float)
         self.reqparse.add_argument('calories', type=float)
@@ -68,7 +67,7 @@ class BeerListApi(Resource):
         g = None
         if args.beer_glass_id:
             g = BeerGlass.get_by_id(args.beer_glass_id)
-        u = User.get_by_id(args.user_id)
+        u = get_user()
         if u is None:
             abort(404, message="User not found.")
         date_added = datetime.datetime.utcnow()
