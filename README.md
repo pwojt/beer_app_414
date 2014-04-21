@@ -44,14 +44,18 @@ To deploy the application:
 ## General Commands:
 
 1. Command format:
-
+   ```
    /api/v1.0/<object>[/id[/sub_object]]
+   ```
 
    object - specifies the object you want to act on (beers, beer_glasses, beer_reviews, users, favorites)
 
    id - (optional) the object ID you want to act on
 
-   sub_object - (optional) if ID is specified, gets the sub object, ie all user reviews would be: /api/v1.0/user/<id>/reviews
+   sub_object - (optional) if ID is specified, gets the sub object, ie all user reviews would be:
+   ```
+   /api/v1.0/user/<id>/reviews
+   ```
 
 2. Authentication:
 
@@ -68,9 +72,9 @@ To deploy the application:
 
    To sort lists returned from get specify the sort parameter via url arguments.
 
-   sort=<field name> - (optional) sort on specified field name, returns 400 result if sort field is not available
+   sort=[field name] - (optional) sort on specified field name, returns 400 result if sort field is not available
 
-   order=<asc|desc> - (optional) if sort is selected, order descending or ascending (default) sort order
+   order=[asc|desc] - (optional) if sort is selected, order descending or ascending (default) sort order
 4. Return:
 
    All data is returned as a JSON object.
@@ -142,23 +146,33 @@ beer object:
 ```
 
 1. Get list of beers:
+   ```
    /api/v1.0/beers - GET
+   ```
    Input: None
    Output: beers array
 2. Get specific beer:
+   ```
    /api/v1.0/beers/<id> - GET
+   ```
    Input: Beer ID
    Output: beer object
 3. Add new beer:
+   ```
    /api/v1.0/beers - POST
+   ```
    Input: Required fields passed in with request
    Output: beer object or error
 4. Update beer:
+   ```
    /api/v1.0/beers/<id> - PUT
+   ```
    Input: Beer ID, Fields that need to be updated
    Output: updated beer object or error
 5. Delete beer:
+   ```
    /api/v1.0/beers/<id> - DELETE
+   ```
    Input: Beer ID
    Output: deleted beer object and action or error
 
@@ -186,23 +200,33 @@ user object:
 ```
 
 1. Get list of users:
+   ```
    /api/v1.0/users - GET
+   ```
    Input: None
    Output: user array
 2. Get specific user:
+   ```
    /api/v1.0/users/<id> - GET
+   ```
    Input: User ID
    Output: user object
 3. Add new user:
+   ```
    /api/v1.0/user - POST
+   ```
    Input: Required fields passed in with request
    Output: user object or error
 4. Update user:
+   ```
    /api/v1.0/users/<id> - PUT
+   ```
    Input: User ID, Fields that need to be updated
    Output: updated user object or error
 5. Delete user:
+   ```
    /api/v1.0/users/<id> - DELETE
+   ```
    Input: User ID
    Output: deleted user object and action or error
 
@@ -228,23 +252,33 @@ beer_glass object:
 ```
 
 1. Get list of beer glasses:
+   ```
    /api/v1.0/beer_glasses - GET
+   ```
    Input: None
    Output: beer_glass array
 2. Get specific beer glass:
+   ```
    /api/v1.0/beer_glasses/<id> - GET
+   ```
    Input: Beer Glass ID
    Output: beer_glass object
 3. Add new beer glass:
+   ```
    /api/v1.0/beer_glasses - POST
+   ```
    Input: Required fields passed in with request
    Output: beer_glass object or error
 4. Update beer glass:
+   ```
    /api/v1.0/beer_glasses/<id> - PUT
+   ```
    Input: Beer Glass ID, Fields that need to be updated
    Output: updated beer_glass object or error
 5. Delete beer glass:
+   ```
    /api/v1.0/beer_glasses/<id> - DELETE
+   ```
    Input: Beer Glass ID
    Output: deleted beer_glass object and action or error
 
@@ -299,27 +333,41 @@ To get summaries of reviews use type argument to specify summary
 
 IE:
 
+```
 /api/v1.0/beer_reviews?type=summary
+```
 
 1. Get all beer reviews:
+   ```
    /api/v1.0/beer_reviews - GET
+   ```
    Input: None
    Output: beer_review array or beer_review_summary array
 2. Get specific beer review:
+   ```
    /api/v1.0/beer_reviews/<id> - GET
+   ```
    Input: Beer Review ID
    Output: beer_review object
 3. Get beer review for a beer:
+   ```
    /api/v1.0/beers/<id>/reviews - GET
+   ```
    Input: Beer ID
    Output: beer_review array or beer_review_summary object
 4. Get reviews for specific user:
+   ```
    /api/v1.0/users/<id>/reviews - GET
+   ```
    Input: Beer ID
    Output: beer_review array
 5. Add beer review:
+   ```
    /api/v1.0/beer_reviews - POST
+   ```
+   ```
    /api/v1.0/beers/<id>/reviews - POST
+   ```
    Input: Beer ID and beer_review input object
    Output: beer_review object
 
@@ -342,31 +390,47 @@ favorites object
 ```
 
 1. Get all favorites for logged in user:
+   ```
    /api/v1.0/favorites - GET
+   ```
    Input: None
    Output: favorites array
 2. Get specific favorite:
+   ```
    /api/v1.0/favorites/<id> - Get
+   ```
    Input: Favorite ID
    Output: favorite object
 3. Get favorites for a user:
+   ```
    /api/v1.0/users/<user id>/favorites - GET
+   ```
    Input: User ID
    Output: favorite array
 4. Get favorites for a beer:
+   ```
    /api/v1.0/beers/<beer id>/favorites - GET
+   ```
    Input: None
    Output: favorites array
 4. Add favorite beer for logged in user:
+   ```
    /api/v1.0/favorites - POST
+   ```
+   ```
    /api/v1.0/beers/<beer id>/favorites - POST
+   ```
    Input: Beer ID
    Output: favorite object
 5. Delete favorite by id:
+   ```
    /api/v1.0/favorites/<id> - DELETE
+   ```
    Input: Favorite ID
    Output: deleted favorite object and action: deleted
 6. Delete favorite beer for logged in user:
+   ```
    /api/v1.0/beers/<beer id>/favorites - DELETE
+   ```
    Input: Beer ID
    Output: deleted favorite object and action: deleted
