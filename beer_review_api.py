@@ -67,7 +67,6 @@ beer_review_summary_fields = {
     'palate': fields.Float,
     'bottle_style': fields.Float,
     'overall': fields.Float,
-    'comments': fields.String,
     'beer': fields.Nested(beer_reference_fields),
 }
 
