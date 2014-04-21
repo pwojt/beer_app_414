@@ -30,3 +30,11 @@ def requires_auth(f):
 
     return decorated
 
+
+def get_user():
+    auth = request.authorization
+    user_name = auth.username
+    u = db.GqlQuery("SELECT * FROM User WHERE user_name = :user_name", user_name=user_name).get()
+    return u
+
+

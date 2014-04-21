@@ -106,28 +106,6 @@ To deploy the application:
    The API supports a variety of input including JSON, form, url args, and anything that can be parsed from the request
    as long as the variable name matches the input name
 
-   IE you can add favorites using the following methods:
-
-   URL arguments
-   ```
-   POST
-   /api/v1.0/users/<user id>/favorites?beer_id=<beer id>
-   ```
-   JSON body
-   ```
-   POST
-   /api/v1.0/users/<user id>/favorites
-   BODY
-   { "beer_id": <beer id> }
-   ```
-   JSON Body through favorites
-   ```
-   POST
-   /api/v1.0/favorites
-   BODY
-   { "user_id": <user id>, "beer_id": <beer id> }
-   ```
-
    The method of input is supported via almost all commands, commands that have multiple ways to post are get are
    documented below
 
@@ -275,7 +253,6 @@ beer_glass object:
 beer_review input
 ```
 {
-    'user_id': int, [Required]
     'beer_id': int, [Required]
     'aroma': float, [Required]
     'appearance': float, [Required]
@@ -352,7 +329,6 @@ favorites input
 ```
 {
     'beer_id': int, [Required]
-    'user_id': int, [Required]
 }
 ```
 
@@ -365,7 +341,7 @@ favorites object
 }
 ```
 
-1. Get all favorites:
+1. Get all favorites for logged in user:
    /api/v1.0/favorites - GET
    Input: None
    Output: favorites array
@@ -374,19 +350,23 @@ favorites object
    Input: Favorite ID
    Output: favorite object
 3. Get favorites for a user:
-   /api/v1.0/users/<id>/favorites - GET
+   /api/v1.0/users/<user id>/favorites - GET
    Input: User ID
    Output: favorite array
-4. Add favorite beer:
+4. Get favorites for a beer:
+   /api/v1.0/beers/<beer id>/favorites - GET
+   Input: None
+   Output: favorites array
+4. Add favorite beer for logged in user:
    /api/v1.0/favorites - POST
-   /api/v1.0/users/<id>/favorites - POST
-   Input: User ID and Beer ID
+   /api/v1.0/beers/<beer id>/favorites - POST
+   Input: Beer ID
    Output: favorite object
 5. Delete favorite by id:
    /api/v1.0/favorites/<id> - DELETE
    Input: Favorite ID
    Output: deleted favorite object and action: deleted
-6. Delete favorite beer for user:
-   /api/v1.0/users/<id>/favorites - DELETE
-   Input: User ID and Beer ID
+6. Delete favorite beer for logged in user:
+   /api/v1.0/beers/<beer id>/favorites - DELETE
+   Input: Beer ID
    Output: deleted favorite object and action: deleted

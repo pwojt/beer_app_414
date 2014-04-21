@@ -4,9 +4,10 @@ __author__ = 'wojtowpj'
 
 from beer_api import Beer
 from user_api import User
-from auth import requires_auth
+from auth import requires_auth, get_user
 from db_helper import IdUrlField, generate_sorted_query
 from flask.ext.restful import Resource, fields, reqparse, marshal, abort
+from flask import request
 from google.appengine.ext import db
 
 
@@ -71,7 +72,6 @@ beer_review_summary_fields = {
 }
 
 post_parser = reqparse.RequestParser()
-post_parser.add_argument('user_id', type=int, required=True, help='user_id is required')
 post_parser.add_argument('aroma', type=float, required=True, help='aroma is required')
 post_parser.add_argument('appearance', type=float, required=True, help='appearance is required')
 post_parser.add_argument('taste', type=float, required=True, help='taste is required')
@@ -107,9 +107,8 @@ class BeerReviewListApi(Resource):
         if args.get('beer_id') is None:
             abort(400, message="beer_id is required")
         b = Beer.get_by_id(args.beer_id)
-        u = User.get_by_id(args.user_id)
 
-        return add_review(u, b, args)
+        return add_review(b, args)
 
 
 class BeerReviewApi(Resource):
@@ -147,9 +146,8 @@ class BeerReviewBeerApi(Resource):
     def post(self, id):
         args = post_parser.parse_args()
         b = Beer.get_by_id(id)
-        u = User.get_by_id(args.user_id)
 
-        return add_review(u, b, args)
+        return add_review(b, args)
 
 
 class BeerReviewUserApi(Resource):
@@ -172,7 +170,7 @@ def moving_average(prev, current, count):
     return prev + (current - prev) / count
 
 
-def add_review(user, beer, review_dict):
+def add_review(beer, review_dict):
     def create_review_summary(beer_review):
         summary = BeerReviewSummary.all().filter('beer', beer_review.beer).get()
         if summary:
@@ -197,6 +195,7 @@ def add_review(user, beer, review_dict):
 
     if beer is None:
         abort(404, message="Beer %s not found.")
+    user = get_user()
     if user is None:
         abort(404, message="User is not found.")
 

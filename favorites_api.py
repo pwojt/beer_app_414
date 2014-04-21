@@ -4,7 +4,7 @@ __author__ = 'wojtowpj'
 
 from beer_api import Beer
 from user_api import User
-from auth import requires_auth
+from auth import requires_auth, get_user
 from db_helper import IdUrlField, generate_sorted_query
 from flask.ext.restful import Resource, fields, reqparse, marshal, abort
 from google.appengine.ext import db
@@ -35,19 +35,26 @@ favorite_user_fields = {
     'uri': IdUrlField('favorite', absolute=True),
 }
 
+favorite_beer_fields = {
+    'beer': fields.Nested(beer_summary_fields),
+    'uri': IdUrlField('favorite', absolute=True),
+    }
+
 
 class FavoritesListApi(Resource):
     def __init__(self):
         self.postparse = reqparse.RequestParser()
         self.postparse.add_argument('beer_id', type=int, required=True, help='beer_id is required')
-        self.postparse.add_argument('user_id', type=int, required=True, help='user_id is required')
 
         super(FavoritesListApi, self).__init__()
 
     @requires_auth
     def get(self):
         favorites = []
-        for f in generate_sorted_query(Favorites):
+        u = get_user()
+        if u is None:
+            abort(404, message="User not found")
+        for f in generate_sorted_query(Favorites).filter('user', u):
             favorites.append(f)
         return {'favorites': map(lambda f: marshal(f, favorite_fields), favorites)}
 
@@ -91,26 +98,36 @@ class FavoritesUserApi(Resource):
             favorites.append(f)
         return {'favorites': map(lambda f: marshal(f, favorite_user_fields), favorites)}
 
+
+class FavoritesBeerApi(Resource):
+    @requires_auth
+    def get(self, id):
+        favorites = []
+        b = Beer.get_by_id(id)
+        if b is None:
+            abort(404, message="Beer not found")
+        for f in generate_sorted_query(Favorites).filter('beer', b):
+            favorites.append(f)
+        return {'favorites': map(lambda f: marshal(f, favorite_beer_fields), favorites)}
+
     @requires_auth
     def post(self, id):
-        args = self.postparse.parse_args()
-        return add_favorite(id, args.beer_id)
+        return add_favorite(id)
 
     @requires_auth
     def delete(self, id):
-        args = self.postparse.parse_args()
-        f = Favorites.all()\
-            .filter('beer', Key.from_path("Beer", args.beer_id))\
-            .filter('user', Key.from_path("User", id))\
-            .get()
+        u = get_user()
+        if u is None:
+            abort(404, message="User not found.")
+        f = Favorites.all().filter('user', u).filter('beer', Key.from_path('Beer', id)).get()
         if f is None:
             abort(404, message="Favorite not found")
         f.delete()
         return {'favorite': marshal(f, favorite_fields), 'action': 'deleted'}
 
 
-def add_favorite(user_id, beer_id):
-    u = User.get_by_id(user_id)
+def add_favorite(beer_id):
+    u = get_user()
     if u is None:
         abort(404, message="User not found")
 

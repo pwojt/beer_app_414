@@ -6,7 +6,6 @@ from google.appengine.api import users
 from db_helper import IdUrlField, generate_sorted_query, update_model
 from flask import abort, redirect, request
 from flask.ext.restful import Resource, reqparse, fields, marshal
-from dateutil import parser
 from auth import requires_auth, hash_password
 
 

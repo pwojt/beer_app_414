@@ -3,7 +3,7 @@ from auth import hash_password
 from beer_api import BeerListApi, BeerApi
 from beer_glass_api import BeerGlassListApi, BeerGlassApi
 from beer_review_api import BeerReviewListApi, BeerReviewApi, BeerReviewBeerApi, BeerReviewUserApi
-from favorites_api import FavoritesUserApi, FavoritesListApi, FavoritesApi
+from favorites_api import FavoritesUserApi, FavoritesListApi, FavoritesApi, FavoritesBeerApi
 from user_api import UserApi, UserListApi, User
 from flask import Flask
 from flask.ext.restful import Api
@@ -23,6 +23,7 @@ api.add_resource(BeerReviewBeerApi, '/api/v1.0/beers/<int:id>/reviews', endpoint
 api.add_resource(BeerReviewListApi, '/api/v1.0/beer_reviews', endpoint='reviews')
 api.add_resource(BeerReviewApi, '/api/v1.0/beer_reviews/<int:id>', endpoint='review')
 api.add_resource(FavoritesUserApi, '/api/v1.0/users/<int:id>/favorites', endpoint='user_favorites')
+api.add_resource(FavoritesBeerApi, '/api/v1.0/beers/<int:id>/favorites', endpoint='beer_favorites')
 api.add_resource(FavoritesListApi, '/api/v1.0/favorites', endpoint='favorites')
 api.add_resource(FavoritesApi, '/api/v1.0/favorites/<int:id>', endpoint='favorite')
 
