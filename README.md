@@ -259,7 +259,7 @@ beer_review input
     'taste': float, [Required]
     'palate': float, [Required]
     'bottle_style': float, [Required]
-    'comment': fields.String,
+    'comments': fields.String,
 }
 ```
 

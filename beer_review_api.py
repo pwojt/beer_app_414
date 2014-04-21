@@ -76,7 +76,7 @@ post_parser.add_argument('appearance', type=float, required=True, help='appearan
 post_parser.add_argument('taste', type=float, required=True, help='taste is required')
 post_parser.add_argument('palate', type=float, required=True, help='palate is required')
 post_parser.add_argument('bottle_style', type=float, required=True, help='bottle_style is required')
-post_parser.add_argument('comment', type=str)
+post_parser.add_argument('comments', type=str)
 
 
 class BeerReviewListApi(Resource):
@@ -221,7 +221,7 @@ def add_review(beer, review_dict):
                    palate=review_dict['palate'],
                    bottle_style=review_dict['bottle_style'],
                    overall=overall,
-                   comments=review_dict.get('comment'))
+                   comments=review_dict.get('comments'))
 
     r.put()
     create_review_summary(r)
