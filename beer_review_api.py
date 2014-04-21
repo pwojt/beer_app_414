@@ -222,7 +222,7 @@ def add_review(beer, review_dict):
                    palate=review_dict['palate'],
                    bottle_style=review_dict['bottle_style'],
                    overall=overall,
-                   comments=review_dict.get('comments'))
+                   comments=review_dict.get('comment'))
 
     r.put()
     create_review_summary(r)
