@@ -72,7 +72,7 @@ class BeerListApi(Resource):
         if u is None:
             abort(404, message="User not found.")
         date_added = datetime.datetime.utcnow()
-        if u.last_beer_add_date is not None:
+        if u.last_beer_add_date is not None and u.user_name != "admin":
             next_allowed = (u.last_beer_add_date + datetime.timedelta(days=1) - date_added).total_seconds()
             if next_allowed > 0:
                 abort(429, message="User can only add one beer per day.", allowed_in=round(next_allowed))
